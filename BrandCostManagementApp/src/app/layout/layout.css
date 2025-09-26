@@ -1,0 +1,33 @@
+.header-bg {
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+}
+
+.learnmore-bg {
+  background: linear-gradient(135deg, #004085, #0069d9);
+  border-top: 5px solid #003366;
+  border-bottom: 5px solid #003366;
+}
+
+.navbar .nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+  border-bottom: 2px solid #fff;
+}
+
+.nav-link {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffd966 !important;
+}
+
+.logout-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+  background-color: #fff !important;
+  color: #0d6efd !important;
+  border-color: #fff !important;
+}
