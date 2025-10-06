@@ -53,6 +53,11 @@ namespace BrandCostManagementAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("email_id");
 
+                    b.Property<string>("Gender")
+                        .HasMaxLength(100)
+                        .HasColumnType("ENUM('Male','Female','Transgender')")
+                        .HasColumnName("gender");
+
                     b.Property<string>("Location")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")

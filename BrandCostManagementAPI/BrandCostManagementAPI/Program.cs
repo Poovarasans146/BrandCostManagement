@@ -5,8 +5,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ✅ Correct EPPlus 8+ license setup
+// ✅ Correct EPPlus 8+ license setup
+ExcelPackage.License.SetNonCommercialPersonal("TVSE");
+
 
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -16,17 +22,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// Email and Jwt services
+// Email and JWT services
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 builder.Services.AddScoped<JwtService>();
 
 // CORS (Angular dev server)
-// IMPORTANT: do not use AllowAnyOrigin with AllowCredentials. Provide explicit origin(s).
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", p => p
-        .WithOrigins("http://localhost:4200", "https://localhost:4200") // exact dev origins
+        .WithOrigins("http://localhost:4200", "https://localhost:4200")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials());
@@ -55,7 +60,6 @@ builder.Services
             RoleClaimType = ClaimTypes.Role
         };
 
-        // Pull token from HttpOnly cookie
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -87,14 +91,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// CORS must be before authentication if you're using cookies from a different origin
 app.UseCors("AllowAngular");
-
 app.UseAuthentication();
 app.UseJwtSlidingExpiration();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

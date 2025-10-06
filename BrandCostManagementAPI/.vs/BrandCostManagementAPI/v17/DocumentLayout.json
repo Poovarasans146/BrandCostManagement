@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|d:\\full stack\\brandcostmanagement\\brandcostmanagementapi\\brandcostmanagementapi\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|solutionrelative:brandcostmanagementapi\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|d:\\full stack\\brandcostmanagement\\brandcostmanagementapi\\brandcostmanagementapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|solutionrelative:brandcostmanagementapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|d:\\full stack\\brandcostmanagement\\brandcostmanagementapi\\brandcostmanagementapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|solutionrelative:brandcostmanagementapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|d:\\full stack\\brandcostmanagement\\brandcostmanagementapi\\brandcostmanagementapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|solutionrelative:brandcostmanagementapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|d:\\full stack\\brandcostmanagement\\brandcostmanagementapi\\brandcostmanagementapi\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9C1E8518-41DE-49ED-BC72-543DD438A14C}|BrandCostManagementAPI\\BrandCostManagementAPI.csproj|solutionrelative:brandcostmanagementapi\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -18,30 +34,82 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "BrandCostManagementAPI\\appsettings.json",
+              "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\appsettings.json",
+              "RelativeToolTip": "BrandCostManagementAPI\\appsettings.json",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAB8AAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-06T09:46:09.082Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "BrandCostManagementAPI\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "BrandCostManagementAPI\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-06T09:46:04.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Program.cs",
+              "RelativeDocumentMoniker": "BrandCostManagementAPI\\Program.cs",
+              "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Program.cs",
+              "RelativeToolTip": "BrandCostManagementAPI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-06T06:06:48.509Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EmployeesController.cs",
+              "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
+              "RelativeDocumentMoniker": "BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
+              "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
+              "RelativeToolTip": "BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
+              "ViewState": "AgIAAFIBAAAAAAAAAAAQwGsBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-06T05:45:19.546Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "BrandCostManagementAPI\\Data\\AppDbContext.cs",
               "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Data\\AppDbContext.cs",
               "RelativeToolTip": "BrandCostManagementAPI\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF0AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAUwHcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-29T12:39:01.322Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Employee.cs",
               "DocumentMoniker": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Models\\Employee.cs",
               "RelativeDocumentMoniker": "BrandCostManagementAPI\\Models\\Employee.cs",
               "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Models\\Employee.cs",
               "RelativeToolTip": "BrandCostManagementAPI\\Models\\Employee.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAgwBsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-30T06:17:33.426Z",
               "EditorCaption": ""

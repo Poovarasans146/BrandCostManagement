@@ -93,6 +93,11 @@ namespace BrandCostManagementAPI.Data
                       .HasColumnName("email_id")
                       .HasMaxLength(50);
 
+                entity.Property(e => e.Gender)
+                      .HasColumnName("gender")
+                      .HasColumnType("ENUM('Male','Female','Transgender')")
+                      .HasMaxLength(100);
+
                 entity.Property(e => e.Location)
                       .HasColumnName("location")
                       .HasMaxLength(100);

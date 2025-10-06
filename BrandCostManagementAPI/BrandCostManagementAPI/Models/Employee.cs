@@ -26,6 +26,9 @@ namespace BrandCostManagementAPI.EmployeeModels
         [MaxLength(50)]
         public string? EmailId { get; set; }
 
+        [Column("gender")]
+        [MaxLength(12)]
+        public string? Gender { get; set; } = "NA";
 
         [Column("location")]
         [MaxLength(100)]

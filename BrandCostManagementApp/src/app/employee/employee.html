@@ -1,0 +1,70 @@
+<div class="container py-4">
+
+  <!-- Heading -->
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="me-2"><i class="bi bi-people-fill"></i> Employee Section</h2>
+  </div>
+
+  <!-- Search and Action Buttons -->
+  <form [formGroup]="searchForm" class="row mb-3 g-2" (submit)="$event.preventDefault()">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Enter Employee ID" formControlName="employeeId">
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="button" (click)="onSearch()">
+        Search
+      </button>
+    </div>
+
+    <!-- Admin-only buttons -->
+    <div class="col-md-2" *ngIf="isAdmin()">
+      <label class="btn btn-success w-100 mb-0">
+        Import
+        <input type="file" hidden (change)="onImport($event)">
+      </label>
+    </div>
+
+    <div class="col-md-2" *ngIf="isAdmin()">
+      <button class="btn btn-warning w-100" type="button" (click)="onAdSync()">AD Sync</button>
+    </div>
+  </form>
+
+  <!-- Employee Table -->
+  <div *ngIf="employees.length > 0; else noData">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Gender</th>
+            <th>Location</th><th>Manager</th><th>Role</th><th>DOJ</th>
+            <th *ngIf="isAdmin()">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of employees">
+            <td>{{ emp.employeeId }}</td>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.mobileNumber }}</td>
+            <td>{{ emp.emailId }}</td>
+            <td>{{ emp.gender }}</td>
+            <td>{{ emp.location }}</td>
+            <td>{{ emp.managerName }}</td>
+            <td>{{ emp.roleStatus }}</td>
+            <td>{{ emp.doj | date:'mediumDate' }}</td>
+            <td *ngIf="isAdmin()">
+              <button class="btn btn-sm btn-info" (click)="onEdit(emp)">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div class="text-center mt-5">
+      <p class="mt-2">No employee data found.</p>
+    </div>
+  </ng-template>
+
+</div>
