@@ -1,20 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EmployeeService, Employee } from '../../services/employee.service';
-import { FormsModule } from '@angular/forms'; // optional
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-employee',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './edit-employee.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule]
 })
 export class EditEmployeeComponent implements OnInit {
   editForm!: FormGroup;
   employeeId!: number;
-  employeeData!: Employee;
   isSubmitting = false;
 
   constructor(
@@ -25,29 +23,50 @@ export class EditEmployeeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam) {
+      alert('Employee ID missing in route');
+      this.router.navigate(['/employees']);
+      return;
+    }
+    this.employeeId = Number(idParam);
 
     this.editForm = this.fb.group({
       employeeId: [{ value: '', disabled: true }],
       name: ['', Validators.required],
-      mobileNumber: ['', Validators.required],
+      mobileNumber: [''],
       emailId: ['', [Validators.required, Validators.email]],
       gender: [''],
       location: [''],
       address: [''],
       managerName: [''],
       roleStatus: [''],
-      doj: [''],
+      cost: [''],
+      doj: ['']
     });
 
+    // Load employee data
     this.empService.getEmployee(this.employeeId).subscribe({
-      next: (res: Employee) => {
-        this.employeeData = res;
-        this.editForm.patchValue(this.employeeData);
+      next: (emp: Employee) => {
+        this.editForm.patchValue({
+          employeeId: emp.employeeId,
+          name: emp.name,
+          mobileNumber: emp.mobileNumber,
+          emailId: emp.emailId,
+          gender: emp.gender,
+          location: emp.location,
+          address: emp.address,
+          managerName: emp.managerName,
+          roleStatus: emp.roleStatus,
+          cost: emp.cost,
+          doj: emp.doj ? new Date(emp.doj).toISOString().substring(0, 10) : ''
+        });
       },
       error: (err: any) => {
-        alert('Failed to load employee data.');
-      },
+        console.error('Failed to load employee', err);
+        alert(err?.error?.message || 'Failed to load employee data');
+        this.router.navigate(['/employees']);
+      }
     });
   }
 
@@ -56,17 +75,37 @@ export class EditEmployeeComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    const payload = { ...this.editForm.getRawValue() };
+    // Get all form values including disabled fields
+    const formData = this.editForm.getRawValue();
 
-    this.empService.updateEmployee(this.employeeId, payload).subscribe({
+    // Remove fields backend shouldn't update
+    delete formData.employeeId;
+    delete formData.emailId;
+
+    // Format date properly
+    if (formData.doj) {
+      formData.doj = new Date(formData.doj).toISOString().substring(0, 10);
+    }
+
+    // Replace empty strings with null to avoid backend parsing issues
+    Object.keys(formData).forEach(key => {
+      if (formData[key] === '') formData[key] = null;
+    });
+
+    console.log('Payload to backend:', formData); // debug payload
+
+    // Send payload as proper JSON object
+    this.empService.updateEmployee(this.employeeId, formData).subscribe({
       next: (res: any) => {
-        alert('Employee updated successfully.');
+        this.isSubmitting = false;
+        alert(res.message || 'Employee updated successfully!');
         this.router.navigate(['/employees']);
       },
       error: (err: any) => {
-        alert('Failed to update employee.');
         this.isSubmitting = false;
-      },
+        console.error(err);
+        alert(err.error?.message || 'Failed to update employee.');
+      }
     });
   }
 }

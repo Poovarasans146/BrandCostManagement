@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Employee, EmployeeService } from '../services/employee.service';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './employee.html',
 })
 export default class EmployeeComponent implements OnInit {
@@ -14,21 +15,20 @@ export default class EmployeeComponent implements OnInit {
   searchForm: FormGroup;
   isSearching = false;
   isImporting = false;
-  showTable = true;
 
-  constructor(private employeeService: EmployeeService) {
+  constructor(private employeeService: EmployeeService, private router: Router) {
     this.searchForm = new FormGroup({
-      employeeId: new FormControl('')
+      employeeId: new FormControl('') // only for input
     });
   }
 
   ngOnInit(): void {
+    // Load all employees initially
     this.loadAllEmployees();
   }
 
   isAdmin(): boolean {
-    // Replace with your logic to check admin
-    return true; // for testing, admin can see import & AD Sync buttons
+    return true; // For testing; replace with real auth check
   }
 
   loadAllEmployees(): void {
@@ -46,7 +46,12 @@ export default class EmployeeComponent implements OnInit {
   }
 
   onSearch(): void {
-    const code = this.searchForm.get('employeeId')?.value || '';
+    const code = this.searchForm.get('employeeId')?.value?.trim();
+    if (!code) {
+      alert('Please enter Employee ID or Name to search.');
+      return;
+    }
+
     this.isSearching = true;
     this.employeeService.searchEmployee(code).subscribe({
       next: (data) => {
@@ -85,6 +90,6 @@ export default class EmployeeComponent implements OnInit {
   }
 
   onEdit(emp: Employee): void {
-    alert(`Edit employee ${emp.employeeId} - implement your logic`);
+    this.router.navigate(['/employees/edit', emp.employeeId]);
   }
 }

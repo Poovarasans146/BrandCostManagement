@@ -46,8 +46,7 @@
               "RelativeToolTip": "BrandCostManagementAPI\\appsettings.json",
               "ViewState": "AgIAABUAAAAAAAAAAAAAAB8AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-06T09:46:09.082Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-06T09:46:09.082Z"
             },
             {
               "$type": "Document",
@@ -59,8 +58,7 @@
               "RelativeToolTip": "BrandCostManagementAPI\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAIsAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-06T09:46:04.457Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-06T09:46:04.457Z"
             },
             {
               "$type": "Document",
@@ -72,8 +70,7 @@
               "RelativeToolTip": "BrandCostManagementAPI\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-06T06:06:48.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-06T06:06:48.509Z"
             },
             {
               "$type": "Document",
@@ -83,7 +80,7 @@
               "RelativeDocumentMoniker": "BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
               "ToolTip": "D:\\Full stack\\BrandCostManagement\\BrandCostManagementAPI\\BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
               "RelativeToolTip": "BrandCostManagementAPI\\Controllers\\EmployeesController.cs",
-              "ViewState": "AgIAAFIBAAAAAAAAAAAQwGsBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADkBAAAAAAAAAAAUwEMBAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-06T05:45:19.546Z",
               "EditorCaption": ""
@@ -98,8 +95,7 @@
               "RelativeToolTip": "BrandCostManagementAPI\\Data\\AppDbContext.cs",
               "ViewState": "AgIAACYAAAAAAAAAAAAUwHcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-29T12:39:01.322Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-29T12:39:01.322Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "BrandCostManagementAPI\\Models\\Employee.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T06:17:33.426Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-30T06:17:33.426Z"
             }
           ]
         }

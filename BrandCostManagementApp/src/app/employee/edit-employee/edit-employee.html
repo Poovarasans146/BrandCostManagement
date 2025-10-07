@@ -1,70 +1,89 @@
 <div class="container py-4">
-  <h2>Edit Employee</h2>
-
-  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <!-- Employee ID (readonly) -->
-    <div class="mb-3">
-      <label class="form-label">Employee ID</label>
-      <input type="text" class="form-control" formControlName="employeeId" [disabled]="true">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-primary text-white text-center rounded-top-4">
+      <h3 class="mb-0 fw-semibold">✏️ Edit Employee Details</h3>
     </div>
 
-    <!-- Name -->
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input type="text" class="form-control" formControlName="name">
-    </div>
+    <div class="card-body p-4">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Employee ID -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Employee ID</label>
+            <input type="text" class="form-control" formControlName="employeeId" readonly>
+          </div>
 
-    <!-- Mobile Number -->
-    <div class="mb-3">
-      <label class="form-label">Mobile Number</label>
-      <input type="text" class="form-control" formControlName="mobileNumber">
-    </div>
+          <!-- Name -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Name</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
 
-    <!-- Email -->
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input type="email" class="form-control" formControlName="emailId">
-    </div>
+          <!-- Mobile Number -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Mobile Number</label>
+            <input type="text" class="form-control" formControlName="mobileNumber">
+          </div>
 
-    <!-- Gender -->
-    <div class="mb-3">
-      <label class="form-label">Gender</label>
-      <input type="text" class="form-control" formControlName="gender">
-    </div>
+          <!-- Email -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" formControlName="emailId">
+          </div>
 
-    <!-- Location -->
-    <div class="mb-3">
-      <label class="form-label">Location</label>
-      <input type="text" class="form-control" formControlName="location">
-    </div>
+          <!-- Gender -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Gender</label>
+            <select class="form-select" formControlName="gender">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Transgender">Transgender</option>
+            </select>
+          </div>
 
-    <!-- Address -->
-    <div class="mb-3">
-      <label class="form-label">Address</label>
-      <input type="text" class="form-control" formControlName="address">
-    </div>
+          <!-- Location -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Location</label>
+            <input type="text" class="form-control" formControlName="location">
+          </div>
 
-    <!-- Manager Name -->
-    <div class="mb-3">
-      <label class="form-label">Manager Name</label>
-      <input type="text" class="form-control" formControlName="managerName">
-    </div>
+          <!-- Manager Name -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Manager Name</label>
+            <input type="text" class="form-control" formControlName="managerName">
+          </div>
 
-    <!-- Role Status -->
-    <div class="mb-3">
-      <label class="form-label">Role Status</label>
-      <input type="text" class="form-control" formControlName="roleStatus">
-    </div>
+          <!-- Role Status -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Role Status</label>
+            <select class="form-select" formControlName="roleStatus">
+              <option value="">Select Role</option>
+              <option value="On-Role">On-Role</option>
+              <option value="Off-Role">Off-Role</option>
+            </select>
+          </div>
 
-    <!-- Date of Joining -->
-    <div class="mb-3">
-      <label class="form-label">Date of Joining</label>
-      <input type="date" class="form-control" formControlName="doj">
-    </div>
+          <!-- Date of Joining -->
+          <div class="col-md-6 col-lg-6">
+            <label class="form-label fw-semibold">Date of Joining</label>
+            <input type="date" class="form-control" formControlName="doj">
+          </div>
 
-    <!-- Submit -->
-    <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'Updating...' : 'Update' }}
-    </button>
-  </form>
+          <!-- Address (last field) -->
+          <div class="col-12">
+            <label class="form-label fw-semibold">Address</label>
+            <textarea rows="2" class="form-control" formControlName="address"></textarea>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+          <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" type="submit" [disabled]="isSubmitting">
+            <i class="bi bi-save me-2"></i>{{ isSubmitting ? 'Updating...' : 'Update Employee' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

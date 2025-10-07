@@ -157,76 +157,71 @@ namespace BrandCostManagementAPI.Controllers
         [HttpPut("{id:int}")]
         [Authorize(Roles = "admin")]
         [Consumes("application/json")]
-        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] JsonElement updateData)
+        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] Dictionary<string, object> updateData)
         {
+            Console.WriteLine("payload received from frontend: ", updateData);
             var employee = await _context.Employees.FindAsync(id);
             if (employee == null)
-                return NotFound(new { message = $"Employee with id {id} not found." });
-
-            Dictionary<string, JsonElement> updates;
-            try
-            {
-                updates = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(updateData.GetRawText());
-            }
-            catch (JsonException)
-            {
-                return BadRequest(new { message = "Invalid JSON payload." });
-            }
+                return NotFound(new { status = "error", message = $"Employee with id {id} not found." });
 
             try
             {
-                foreach (var kvp in updates)
+                foreach (var kvp in updateData)
                 {
                     var key = kvp.Key.Trim().ToLowerInvariant();
-                    var val = kvp.Value;
+                    var val = kvp.Value?.ToString();
 
                     switch (key)
                     {
                         case "name":
-                            employee.Name = val.GetString();
+                            employee.Name = val;
                             break;
                         case "mobilenumber":
-                            employee.MobileNumber = val.GetString();
+                            employee.MobileNumber = val;
                             break;
                         case "gender":
-                            employee.Gender = val.GetString();
+                            employee.Gender = val;
                             break;
                         case "location":
-                            employee.Location = val.GetString();
+                            employee.Location = val;
                             break;
                         case "address":
-                            employee.Address = val.GetString();
+                            employee.Address = val;
                             break;
                         case "managername":
-                            employee.ManagerName = val.GetString();
+                            employee.ManagerName = val;
                             break;
                         case "rolestatus":
-                            employee.RoleStatus = val.GetString();
+                            employee.RoleStatus = val;
                             break;
                         case "cost":
-                            if (val.ValueKind == JsonValueKind.Number && val.TryGetInt32(out var cost))
+                            if (int.TryParse(val, out var cost))
                                 employee.Cost = cost;
-                            else if (val.ValueKind == JsonValueKind.String && int.TryParse(val.GetString(), out var cost2))
-                                employee.Cost = cost2;
                             break;
                         case "doj":
-                            if (val.ValueKind == JsonValueKind.String && DateTime.TryParse(val.GetString(), out var doj))
+                            if (DateTime.TryParse(val, out var doj))
                                 employee.Doj = doj;
                             break;
-                        // ignore EmployeeId and EmailId updates here (not editable per requirement)
-                        default:
-                            // unknown keys ignored
+                        // skip uneditable fields
+                        case "employeeid":
+                        case "emailid":
                             break;
                     }
                 }
 
                 await _context.SaveChangesAsync();
-                return Ok(new { message = "Employee updated successfully.", employee });
+
+                return Ok(new
+                {
+                    status = "success",
+                    message = $"Employee with ID {id} updated successfully.",
+                    updatedEmployee = employee
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating employee id {EmployeeId}", id);
-                return StatusCode(500, new { message = "Failed to update employee." });
+                return StatusCode(500, new { status = "error", message = "Failed to update employee." });
             }
         }
 
@@ -257,7 +252,6 @@ namespace BrandCostManagementAPI.Controllers
                     return BadRequest(new { message = "Invalid Excel file format - worksheet missing." });
 
                 int rowCount = worksheet.Dimension.Rows;
-                // Cache existing IDs for faster checks
                 var existingEmployeeIds = await _context.Employees.Select(e => e.EmployeeId).ToListAsync();
                 var newEmployees = new List<Employee>();
 
@@ -285,7 +279,7 @@ namespace BrandCostManagementAPI.Controllers
                             Name = worksheet.Cells[row, 2]?.Text?.Trim(),
                             MobileNumber = worksheet.Cells[row, 3]?.Text?.Trim(),
                             EmailId = worksheet.Cells[row, 4]?.Text?.Trim(),
-                            Gender = worksheet.Cells[row, 5]?.Text?.Trim(),
+                            Gender = NormalizeGender(worksheet.Cells[row, 5]?.Text?.Trim()),
                             Location = worksheet.Cells[row, 6]?.Text?.Trim(),
                             Address = worksheet.Cells[row, 7]?.Text?.Trim(),
                             ManagerName = worksheet.Cells[row, 8]?.Text?.Trim(),
@@ -294,8 +288,10 @@ namespace BrandCostManagementAPI.Controllers
                             Cost = int.TryParse(worksheet.Cells[row, 11]?.Text?.Trim(), out var c) ? c : 0
                         };
 
+                        Console.WriteLine($"Row {row}: {employee.Name}, {employee.Gender}");
+
                         newEmployees.Add(employee);
-                        existingEmployeeIds.Add(employeeId); // avoid duplicates inside file
+                        existingEmployeeIds.Add(employeeId);
                         importedCount++;
                     }
                     catch (Exception rowEx)
@@ -324,6 +320,20 @@ namespace BrandCostManagementAPI.Controllers
                 return StatusCode(500, new { message = "Import failed due to server error." });
             }
         }
+
+        private string NormalizeGender(string? raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return null;
+
+            raw = raw.Trim().ToLowerInvariant();
+
+            if (raw.StartsWith("m")) return "Male";
+            if (raw.StartsWith("f")) return "Female";
+            if (raw.StartsWith("t")) return "Transgender";
+
+            return null; // invalid or unknown gender
+        }
+
 
         // ============================================================
         // 8. DELETE: /api/employees/{id}  (admin only)
