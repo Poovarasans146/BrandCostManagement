@@ -9,6 +9,9 @@ import { EditEmployeeComponent } from './employee/edit-employee/edit-employee';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password';
+import { UserManagement } from './user-management/user-management';
+import { UserAdd } from './user-management/user-add';
+import { UserEdit } from './user-management/user-edit';
 
 export const routes: Routes = [
   // Default route
@@ -30,6 +33,9 @@ export const routes: Routes = [
       { path: 'dashboard', component: Page, canActivate: [RoleGuard] },
       { path: 'employees', component: EmployeeComponent, canActivate: [RoleGuard] },
       { path: 'employees/edit/:id', component: EditEmployeeComponent, canActivate: [RoleGuard] },
+      { path: 'user-management', component: UserManagement, canActivate: [RoleGuard] },
+      { path: 'users/add', component: UserAdd, canActivate: [RoleGuard] },
+      { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard] },
       { path: 'projects', component: Page, canActivate: [RoleGuard] },
       { path: 'project-allocation', component: Page, canActivate: [RoleGuard] },
       { path: 'hr-cm', component: Page, canActivate: [RoleGuard] },

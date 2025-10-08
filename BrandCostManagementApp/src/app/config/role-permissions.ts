@@ -9,7 +9,9 @@ export const RolePermissions: { [key: string]: string[] } = {
     'finance-cm',
     'user-management',
     'reports',
-    'employees/edit/:id'
+    'employees/edit/:id',
+    'users/add',
+    'users/edit/:id'
   ],
   manager: ['home', 'dashboard', 'employees', 'projects', 'project-allocation','reports'],
   hr: ['home', 'dashboard', 'employees', 'hr-cm'],

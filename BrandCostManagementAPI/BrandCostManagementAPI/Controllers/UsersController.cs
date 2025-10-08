@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using BCrypt.Net;
 using BrandCostManagementAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BrandCostManagementAPI.Controllers
 {
@@ -22,41 +23,66 @@ namespace BrandCostManagementAPI.Controllers
             _emailService = emailService;
         }
 
+        // -------------------
+        // Admin-only CRUD
+        // -------------------
+
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return NotFound();
-            return user;
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(user);
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> CreateUser([FromBody] User user)
         {
+            if (user == null)
+                return BadRequest(new { message = "Invalid user data" });
+
             string plainPassword = user.Password;
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            await _emailService.SendOnboardEmail(
-                user.UserName, user.UserId, user.UserName, user.FullName, plainPassword, user.Role
-            );
+                await _emailService.SendOnboardEmail(
+                    user.UserName, user.UserId, user.UserName, user.FullName, plainPassword, user.Role
+                );
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+                return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, new { message = "Failed to create user", detail = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
+            if (updatedUser == null)
+                return BadRequest(new { message = "Invalid user data" });
+
             var existingUser = await _context.Users.FindAsync(id);
-            if (existingUser == null) return NotFound();
+            if (existingUser == null)
+                return NotFound(new { message = "User not found" });
 
             bool passwordChanged = false;
             string plainPassword = string.Empty;
@@ -73,29 +99,50 @@ namespace BrandCostManagementAPI.Controllers
             existingUser.Role = updatedUser.Role;
 
             _context.Entry(existingUser).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
 
-            if (passwordChanged)
+            try
             {
-                await _emailService.SendOnboardEmail(
-                    existingUser.UserName, existingUser.UserId, existingUser.UserName, existingUser.FullName, plainPassword, existingUser.Role
-                );
-            }
+                await _context.SaveChangesAsync();
 
-            return NoContent();
+                if (passwordChanged)
+                {
+                    await _emailService.SendOnboardEmail(
+                        existingUser.UserName, existingUser.UserId, existingUser.UserName,
+                        existingUser.FullName, plainPassword, existingUser.Role
+                    );
+                }
+
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, new { message = "Failed to update user", detail = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound(new { message = "User not found" });
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, new { message = "Failed to delete user", detail = ex.Message });
+            }
         }
+
+        // -------------------
+        // Forgot Password / OTP
+        // -------------------
 
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] dynamic body)
@@ -107,11 +154,8 @@ namespace BrandCostManagementAPI.Controllers
 
             // Generate OTP
             string otp = new Random().Next(100000, 999999).ToString();
-
-            // Hash OTP
             string otpHash = BCrypt.Net.BCrypt.HashPassword(otp);
 
-            // Save OTPRequest
             var otpRequest = new OtpRequest
             {
                 UserId = user.UserId,
@@ -124,12 +168,10 @@ namespace BrandCostManagementAPI.Controllers
             _context.OtpRequests.Add(otpRequest);
             await _context.SaveChangesAsync();
 
-            // Send OTP by email
             await _emailService.SendOtpEmail(user.UserName, otp);
 
             return Ok(new { otpRequestId = otpRequest.Id, message = "OTP sent to your email" });
         }
-
 
         [HttpPost("verify-forgot-otp")]
         public async Task<IActionResult> VerifyForgotOtp([FromBody] dynamic body)
@@ -147,17 +189,14 @@ namespace BrandCostManagementAPI.Controllers
             if (otpRequest.Used || otpRequest.ExpiresAt < DateTime.UtcNow)
                 return BadRequest(new { message = "OTP expired or already used" });
 
-            // Verify OTP hash
             if (!BCrypt.Net.BCrypt.Verify(otp, otpRequest.OtpHash))
                 return Unauthorized(new { message = "Invalid OTP" });
 
-            // Mark as used
             otpRequest.Used = true;
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "OTP verified", userId = otpRequest.UserId });
         }
-
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] dynamic body)
@@ -173,12 +212,10 @@ namespace BrandCostManagementAPI.Controllers
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
-            // Hash new password
             user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Password updated successfully" });
         }
-
     }
 }
