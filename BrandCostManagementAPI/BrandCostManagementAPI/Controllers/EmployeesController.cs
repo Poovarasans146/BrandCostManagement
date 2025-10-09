@@ -159,7 +159,7 @@ namespace BrandCostManagementAPI.Controllers
         [Consumes("application/json")]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] Dictionary<string, object> updateData)
         {
-            Console.WriteLine("payload received from frontend: ", updateData);
+           // Console.WriteLine("payload received from frontend: ", updateData);
             var employee = await _context.Employees.FindAsync(id);
             if (employee == null)
                 return NotFound(new { status = "error", message = $"Employee with id {id} not found." });

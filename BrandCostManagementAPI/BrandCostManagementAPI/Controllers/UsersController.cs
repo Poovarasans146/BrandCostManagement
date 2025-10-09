@@ -77,6 +77,7 @@ namespace BrandCostManagementAPI.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
+            Console.WriteLine("hello.............");
             if (updatedUser == null)
                 return BadRequest(new { message = "Invalid user data" });
 
@@ -86,10 +87,11 @@ namespace BrandCostManagementAPI.Controllers
 
             bool passwordChanged = false;
             string plainPassword = string.Empty;
-
+            Console.WriteLine(updatedUser.Password, existingUser.Password, "**********************");
             if (!string.IsNullOrEmpty(updatedUser.Password) &&
-                !BCrypt.Net.BCrypt.Verify(updatedUser.Password, existingUser.Password))
+                updatedUser.Password != existingUser.Password)
             {
+                Console.WriteLine(updatedUser.Password, existingUser.Password, ".................");
                 plainPassword = updatedUser.Password;
                 existingUser.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
                 passwordChanged = true;
@@ -116,7 +118,8 @@ namespace BrandCostManagementAPI.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, new { message = "Failed to update user", detail = ex.Message });
+                Console.WriteLine("failed......................");
+                return StatusCode(500, new { message = "Failed to update user's", detail = ex.InnerException?.Message ?? ex.Message });
             }
         }
 

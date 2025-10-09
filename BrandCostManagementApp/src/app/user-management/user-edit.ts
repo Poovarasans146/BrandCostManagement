@@ -14,7 +14,8 @@ export class UserEdit implements OnInit {
   editForm!: FormGroup;
   userId!: number;
   isSubmitting = false;
-
+  private currentPassword: string = '';
+  private currentUsername: string = '';
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -42,11 +43,15 @@ export class UserEdit implements OnInit {
     // Load user data
     this.userService.getUserById(this.userId).subscribe({
       next: (user: User) => {
+        console.log(user);
+        this.currentPassword = user.password || '';
+        this.currentUsername = user.userName || '';
         this.editForm.patchValue({
           userId: user.userId,
           userName: user.userName,
           fullName: user.fullName,
           role: user.role,
+          
         });
       },
       error: (err) => {
@@ -67,10 +72,12 @@ export class UserEdit implements OnInit {
 
     // Send only editable fields to backend
     const payload: Partial<User> = {
+      userName: this.currentUsername,
       fullName: formData.fullName,
       role: formData.role,
+      password: this.currentPassword
     };
-
+     console.log(payload);
     this.userService.updateUser({ userId: this.userId, ...payload } as User).subscribe({
       next: () => {
         this.isSubmitting = false;
@@ -80,7 +87,7 @@ export class UserEdit implements OnInit {
       error: (err) => {
         this.isSubmitting = false;
         console.error(err);
-        alert(err?.error?.message || 'Failed to update user.');
+        alert(err?.error?.message || 'Failed to update users.');
       },
     });
   }
