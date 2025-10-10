@@ -12,6 +12,9 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password';
 import { UserManagement } from './user-management/user-management';
 import { UserAdd } from './user-management/user-add';
 import { UserEdit } from './user-management/user-edit';
+import HrComponent from './hr/hr';
+import {EditEmployeeHrFormComponent} from './hr/edit-employee-hr-form';
+
 
 export const routes: Routes = [
   // Default route
@@ -38,7 +41,8 @@ export const routes: Routes = [
       { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard] },
       { path: 'projects', component: Page, canActivate: [RoleGuard] },
       { path: 'project-allocation', component: Page, canActivate: [RoleGuard] },
-      { path: 'hr-cm', component: Page, canActivate: [RoleGuard] },
+      { path: 'hr-cm', component: HrComponent, canActivate: [RoleGuard] },
+      { path: 'hr/edit/:id', component: EditEmployeeHrFormComponent, canActivate: [RoleGuard] },
       { path: 'finance-cm', component: Page, canActivate: [RoleGuard] },
       { path: 'user-management', component: Page, canActivate: [RoleGuard] },
       { path: 'reports', component: Page, canActivate: [RoleGuard] },

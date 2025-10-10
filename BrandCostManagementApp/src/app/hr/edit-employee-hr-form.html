@@ -1,0 +1,82 @@
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-primary text-white text-center rounded-top-4">
+      <h3 class="mb-0 fw-semibold">✏️ Edit Employee (HR) — Cost only</h3>
+    </div>
+
+    <div class="card-body p-4">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Employee ID</label>
+            <input type="text" class="form-control" formControlName="employeeId" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Name</label>
+            <input type="text" class="form-control" formControlName="name" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Mobile Number</label>
+            <input type="text" class="form-control" formControlName="mobileNumber" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" formControlName="emailId" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Gender</label>
+            <input type="text" class="form-control" formControlName="gender" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Location</label>
+            <input type="text" class="form-control" formControlName="location" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Manager Name</label>
+            <input type="text" class="form-control" formControlName="managerName" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Role Status</label>
+            <input type="text" class="form-control" formControlName="roleStatus" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Date of Joining</label>
+            <input type="date" class="form-control" formControlName="doj" readonly>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Address</label>
+            <textarea rows="2" class="form-control" formControlName="address" readonly></textarea>
+          </div>
+
+          <!-- COST (only editable field) -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Cost</label>
+            <input type="number" class="form-control" formControlName="cost" min="0" step="0.01">
+            <div *ngIf="editForm.get('cost')?.invalid && editForm.get('cost')?.touched" class="text-danger small mt-1">
+              Cost is required and must be ≥ 0.
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" type="submit" [disabled]="isSubmitting">
+            <i class="bi bi-save me-2"></i>{{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+          </button>
+
+          <button class="btn btn-secondary ms-2 px-4 py-2 rounded-pill" type="button" (click)="goBack()" [disabled]="isSubmitting">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
