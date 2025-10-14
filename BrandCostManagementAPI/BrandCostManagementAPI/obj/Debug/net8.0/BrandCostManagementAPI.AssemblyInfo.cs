@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BrandCostManagementAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f6dd5e3f83a46bb3fcce425240f852222a593a4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e42124779b22593240fe2e0571197f7f1795a774")]
 [assembly: System.Reflection.AssemblyProductAttribute("BrandCostManagementAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BrandCostManagementAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
