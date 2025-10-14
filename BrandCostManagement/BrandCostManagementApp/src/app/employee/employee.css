@@ -1,0 +1,15 @@
+/* For suggestions dropdown */
+.list-group {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.zindex-1 {
+  z-index: 1000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .row.g-2 > [class*='col-'] {
+    margin-bottom: 8px;
+  }
+}
