@@ -15,6 +15,10 @@ import { UserEdit } from './user-management/user-edit';
 import HrComponent from './hr/hr';
 import {EditEmployeeHrFormComponent} from './hr/edit-employee-hr-form';
 
+import { ProjectsComponent } from './projects/projects';
+import {ProjectCreateComponent} from './projects/project-create';
+import { ProjectEditComponent } from './projects/project-edit'
+import { ProjectAllocationsComponent } from './pages/project-allocations/project-allocations.component';
 
 export const routes: Routes = [
   // Default route
@@ -39,8 +43,10 @@ export const routes: Routes = [
       { path: 'user-management', component: UserManagement, canActivate: [RoleGuard] },
       { path: 'users/add', component: UserAdd, canActivate: [RoleGuard] },
       { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard] },
-      { path: 'projects', component: Page, canActivate: [RoleGuard] },
-      { path: 'project-allocation', component: Page, canActivate: [RoleGuard] },
+      { path: 'projects', component: ProjectsComponent, canActivate: [RoleGuard] },
+      { path: 'projects/add', component: ProjectCreateComponent, canActivate: [RoleGuard] },
+      { path: 'projects/edit/:projectId', component: ProjectEditComponent, canActivate: [RoleGuard] },
+      { path: 'project-allocation', component: ProjectAllocationsComponent, canActivate: [RoleGuard] },
       { path: 'hr-cm', component: HrComponent, canActivate: [RoleGuard] },
       { path: 'hr/edit/:id', component: EditEmployeeHrFormComponent, canActivate: [RoleGuard] },
       { path: 'finance-cm', component: Page, canActivate: [RoleGuard] },

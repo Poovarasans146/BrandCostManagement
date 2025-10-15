@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Employee, EmployeeService } from '../services/employee.service';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,8 @@ export default class EmployeeComponent implements OnInit {
     private employeeService: EmployeeService,
     private router: Router,
     private authService: AuthService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cd:ChangeDetectorRef
   ) {
     this.searchForm = new FormGroup({
       employeeId: new FormControl('')
@@ -87,11 +88,13 @@ export default class EmployeeComponent implements OnInit {
       next: (data) => {
         this.employees = data;
         this.isSearching = false;
+        this.cd.detectChanges();
       },
       error: () => {
         this.employees = [];
         this.isSearching = false;
         alert('Search failed. Check backend or network.');
+        this.cd.detectChanges();
       }
     });
   }

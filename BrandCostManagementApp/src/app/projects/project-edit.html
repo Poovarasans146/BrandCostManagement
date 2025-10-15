@@ -1,0 +1,83 @@
+<div class="container py-4">
+  <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white text-center rounded-top-4">
+      <h3 class="mb-0 fw-semibold">✏️ Edit Project</h3>
+    </div>
+
+    <div class="card-body p-4">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+        <!-- BU & Project ID -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">BU</label>
+          <input type="text" class="form-control" formControlName="buName" readonly />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Project ID</label>
+          <input type="text" class="form-control" formControlName="projectId" readonly />
+        </div>
+
+        <!-- Project Name & Brand -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Project Name</label>
+          <input type="text" class="form-control" formControlName="projectName" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Brand</label>
+          <input type="text" class="form-control" formControlName="brand" />
+        </div>
+
+        <!-- Approved Count & Project Value -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Approved Count</label>
+          <input type="number" class="form-control" formControlName="approvedCount" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Project Value</label>
+          <input type="number" class="form-control" formControlName="projectValue" />
+        </div>
+
+        <!-- Start Date & End Date -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Start Date</label>
+          <input type="date" class="form-control" formControlName="projectStartDate" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">End Date</label>
+          <input type="date" class="form-control" formControlName="projectEndDate" />
+        </div>
+
+        <!-- Brand Logo -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Brand Logo</label>
+          <input type="file" class="form-control" (change)="onFileChange($event)" accept=".png,.jpg,.jpeg" />
+          <div class="mt-2">
+            <img *ngIf="logoPreview; else existingLogo" 
+                 [src]="logoPreview" 
+                 class="img-thumbnail" 
+                 style="max-width:150px; max-height:80px; object-fit:contain;" />
+            <ng-template #existingLogo>
+              <img *ngIf="project?.brandLogo" 
+                   [src]="'data:image/*;base64,' + (project?.brandLogo ?? '')" 
+                   class="img-thumbnail" 
+                   style="max-width:150px; max-height:80px; object-fit:contain;" />
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-secondary px-4" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
+            {{ loading ? 'Updating...' : 'Update' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

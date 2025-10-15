@@ -75,6 +75,10 @@ builder.Services
         };
     });
 
+// ----- Application services (Project / Allocation) -----
+//builder.Services.AddScoped<IProjectService, ProjectService>();
+//builder.Services.AddScoped<IProjectAllocationService, ProjectAllocationService>();
+
 // Controllers
 builder.Services.AddControllers()
     .AddNewtonsoftJson();

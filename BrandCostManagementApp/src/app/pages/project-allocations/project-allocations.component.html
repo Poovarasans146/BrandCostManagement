@@ -1,0 +1,104 @@
+<!-- src/app/pages/project-allocations/project-allocations.component.html -->
+<div class="container page">
+  <h2>Project Allocation</h2>
+
+  <div class="row align-items-center">
+    <div class="col-md-3">
+      <select class="form-control" (change)="onBUChange($any($event.target).value)">
+        <option value="">Select BU</option>
+        <option *ngFor="let b of bus" [value]="b">{{b}}</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <div *ngIf="projects.length" class="d-flex flex-row">
+        <div *ngFor="let p of projects" class="card m-2 p-2 logo-card" (click)="onProjectSelect(p.projectId)">
+          <img *ngIf="p.brandLogo" [src]="'data:image/*;base64,' + p.brandLogo" class="logo-img" />
+          <div class="text-center mt-2">{{p.brand}}<br />{{p.projectId}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedProject" class="mt-3">
+    <h4>Assignments for {{selectedProject.projectName}} ({{selectedProject.projectId}})</h4>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Emp ID</th>
+          <th>Name</th>
+          <th>Project ID</th>
+          <th>Role</th>
+          <th>Allocation %</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of assignments">
+          <td>{{a.employeeId}}</td>
+          <td>{{a.employeeName || '-'}}</td>
+          <td>{{a.projectId}}</td>
+          <td>{{a.role || 'On-role'}}</td>
+          <td>{{a.allocation}}</td>
+          <td>{{a.allocationStart | date}}</td>
+          <td>{{a.allocationEnd | date}}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" (click)="editAssignment(a)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteAssignment(a.projectAllocationId)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card mt-3 p-3">
+    <h5>{{ editingId ? 'Edit Assignment' : 'Create Assignment' }}</h5>
+    <form [formGroup]="form" (ngSubmit)="editingId ? updateAssignment() : createAssignment()">
+      <div class="row">
+        <div class="col-md-3">
+          <label>Employee</label>
+          <select class="form-control" formControlName="employeeId">
+            <option value="">Select Employee</option>
+            <option *ngFor="let e of employees" [value]="e.employeeId">{{e.employeeId}} - {{e.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label>BU</label>
+          <select formControlName="bu" class="form-control" (change)="onBUChange($any($event.target).value)">
+            <option value="">Select BU</option>
+            <option *ngFor="let b of bus" [value]="b">{{b}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label>Project</label>
+          <select formControlName="projectId" class="form-control">
+            <option value="">Select Project</option>
+            <option *ngFor="let p of projects" [value]="p.projectId">{{p.projectId}} - {{p.projectName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label>Allocation %</label>
+          <input type="number" class="form-control" formControlName="allocationPercent" min="1" max="100" />
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-3">
+          <label>Start Date</label>
+          <input type="date" class="form-control" formControlName="allocationStart" />
+        </div>
+        <div class="col-md-3">
+          <label>End Date</label>
+          <input type="date" class="form-control" formControlName="allocationEnd" />
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button class="btn btn-primary" type="submit">{{ editingId ? 'Update' : 'Create' }}</button>
+        <button type="button" class="btn btn-secondary" (click)="form.reset({ role: 'On-role', allocationPercent: 1 })">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
