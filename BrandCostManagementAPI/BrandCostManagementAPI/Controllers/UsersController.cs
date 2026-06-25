@@ -47,7 +47,7 @@ namespace BrandCostManagementAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> CreateUser([FromBody] User user)
         {
             if (user == null)
