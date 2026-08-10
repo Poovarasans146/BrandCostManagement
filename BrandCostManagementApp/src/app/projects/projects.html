@@ -51,6 +51,7 @@
           <th>Value</th>
           <th>Start</th>
           <th>End</th>
+          <th *ngIf="userRole==='admin'"> Contract Document </th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -65,6 +66,28 @@
           <td>{{selectedProject.projectValue | currency}}</td>
           <td>{{selectedProject.projectStartDate | date}}</td>
           <td>{{selectedProject.projectEndDate | date}}</td>
+          <td *ngIf="userRole==='admin'" class="text-center">
+
+              <button
+                  *ngIf="selectedProject.contractDocumentName"
+                  class="btn btn-sm btn-info"
+                  (click)="viewContract(selectedProject,$event)">
+
+                  <i class="bi bi-file-earmark-pdf"></i>
+                  View
+
+              </button>
+
+              <span
+                  *ngIf="!selectedProject.contractDocumentName"
+                  class="text-muted">
+
+                  -
+
+              </span>
+
+          </td>
+
           <!-- Edit button in table -->
 <td class="text-center">
   <button class="btn btn-sm btn-warning" 

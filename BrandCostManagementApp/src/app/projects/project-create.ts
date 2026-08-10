@@ -13,6 +13,9 @@ interface Project {
   allocatedCount: number;
   projectValue: number;
   brandLogo?: File | null;
+  //contractDocument?: File | null;
+  contractDocument?: string | null;
+  contractDocumentName?: string | null;
   projectStartDate?: string;
   projectEndDate?: string;
 }
@@ -28,6 +31,8 @@ export class ProjectCreateComponent implements OnInit {
   bus = ['IMS','FSS','CSS'];
   form!: FormGroup;
   logoFile?: File;
+  contractFile?: File;
+
   apiUrl = 'http://localhost:5157/api/Projects'; // change to your backend
 
   constructor(private fb: FormBuilder, private http: HttpClient, public router: Router) {}
@@ -70,6 +75,32 @@ export class ProjectCreateComponent implements OnInit {
     this.logoFile = event.target.files?.[0];
   }
 
+  onContractSelected(event: any) {
+
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      this.contractFile = undefined;
+      return;
+    }
+    if(file.size > 10 * 1024 * 1024)
+    {
+        alert('Maximum PDF size is 10 MB.');
+        event.target.value='';
+        this.contractFile=undefined;
+        return;
+    }
+
+    if (file.type !== 'application/pdf') {
+      alert('Only PDF files are allowed.');
+      event.target.value = '';
+      this.contractFile = undefined;
+      return;
+    }
+
+    this.contractFile = file;
+  }
+
 submitCreate() {
   if (this.form.invalid) {
     this.form.markAllAsTouched();
@@ -94,6 +125,8 @@ submitCreate() {
   fd.append('ProjectEndDate', end + 'T00:00:00');
 
   if (this.logoFile) fd.append('BrandLogo', this.logoFile, this.logoFile.name);
+
+  if (this.contractFile) fd.append('ContractDocument', this.contractFile, this.contractFile.name);
 
   this.http.post(this.apiUrl, fd, { headers: this.getAuthHeader() })
     .subscribe({

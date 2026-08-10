@@ -1,14 +1,201 @@
+/* =========================================================
+   Edit Employee - Enterprise UI
+   ========================================================= */
+
+/* Page */
+.container {
+  max-width: 1100px;
+}
+
+/* =========================================================
+   Card
+   ========================================================= */
+
 .card {
-  transition: all 0.3s ease;
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.25s ease;
 }
+
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
+
+/* =========================================================
+   Header
+   ========================================================= */
+
+.card-header {
+  background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+  padding: 1rem 1.5rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   Body
+   ========================================================= */
+
+.card-body {
+  background: #ffffff;
+  padding: 2rem;
+}
+
+/* =========================================================
+   Labels
+   ========================================================= */
+
 .form-label {
-  color: #333;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 6px;
 }
-.form-control:focus, .form-select:focus {
+
+/* =========================================================
+   Inputs
+   ========================================================= */
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  min-height: 46px;
+  transition: all 0.25s ease;
+}
+
+textarea.form-control {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: #86b7fe;
+}
+
+.form-control:focus,
+.form-select:focus {
   border-color: #0d6efd;
-  box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 0 0 .18rem rgba(13, 110, 253, .15);
+}
+
+/* Readonly field */
+
+input[readonly] {
+  background: #f8f9fa;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Unsaved Badge
+   ========================================================= */
+
+.badge {
+  font-size: .8rem;
+  padding: .55rem .85rem;
+  border-radius: 50px;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+.btn {
+  min-width: 180px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all .25s ease;
+}
+
+/* Update */
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+/* Cancel */
+
+.btn-outline-secondary:hover {
+  transform: translateY(-2px);
+}
+
+/* Disabled Update */
+
+.btn:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Form Spacing
+   ========================================================= */
+
+.row.g-3 > div {
+  margin-bottom: .25rem;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .card-body {
+    padding: 1.4rem;
+  }
+
+  .card-header {
+    text-align: center;
+  }
+
+  .card-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .card {
+    border-radius: 14px;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .form-control,
+  .form-select {
+    min-height: 44px;
+    font-size: .95rem;
+  }
+
+  textarea.form-control {
+    min-height: 80px;
+  }
+
+  .card-header h3 {
+    font-size: 1.15rem;
+  }
+
 }

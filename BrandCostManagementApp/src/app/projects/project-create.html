@@ -52,6 +52,12 @@
             <input type="file" class="form-control" (change)="onLogoSelected($event)" accept=".png,.jpg,.jpeg"/>
           </div>
         </div>
+          <br />
+          <div class="col-md-4">
+            <label>Contract Document (PDF)</label>
+            <input type="file" class="form-control" accept=".pdf" (change)="onContractSelected($event)">
+            <div *ngIf="contractFile" class="text-success mt-2"> {{ contractFile.name }} </div>
+          </div>
 
         <div class="mt-3 d-flex gap-2">
           <button type="submit" class="btn btn-primary">Create</button>

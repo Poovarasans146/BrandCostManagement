@@ -31,3 +31,37 @@
   color: #0d6efd !important;
   border-color: #fff !important;
 }
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.brand-icon {
+  font-size: 1.6rem;
+  color: #ffd966;
+}
+
+.brand-text {
+  color: white;
+  transition: color .3s;
+}
+
+.navbar-brand:hover .brand-text {
+  color: #ffd966;
+}
+
+/* Navigation spacing */
+.navbar-nav .nav-item {
+  margin-left: 6px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,.12);
+}

@@ -1,119 +1,245 @@
 <!-- Hero Section -->
 <section class="py-5 bg-light">
   <div class="container">
-    <div class="row align-items-center g-4">
-      <!-- Left: Text -->
-      <div class="col-lg-6">
-        <h1 class="display-5 fw-bold">Empower your team and projects</h1>
-        <p class="lead text-secondary">
+
+    <!-- Hero -->
+    <div class="row align-items-center g-5">
+      <!-- Left -->
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="display-5 fw-bold">
+          Empower Your Team & Projects
+        </h1>
+
+        <p class="lead text-secondary mt-3">
           Manage employees and projects efficiently in one place.
         </p>
-        <div class="d-flex gap-3">
-          <a class="btn btn-primary btn-lg" (click)="goToDashboard()">Get started</a>
-          <a class="btn btn-outline-secondary btn-lg" (click)="scrollToAbout()">Learn more</a>
+
+        <div
+          class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mt-4"
+        >
+          <a
+            class="btn btn-primary btn-lg px-4"
+            (click)="goToDashboard()"
+          >
+            Get Started
+          </a>
+
+          <a
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="scrollToAbout()"
+          >
+            Learn More
+          </a>
         </div>
       </div>
 
-      <!-- Right: Image -->
+      <!-- Right -->
       <div class="col-lg-6 text-center">
-        <img src="/home-girl.png" class="img-fluid rounded shadow-sm" alt="Illustration" />
+        <img
+          src="/home-girl.png"
+          class="img-fluid rounded shadow"
+          alt="PeopleHub"
+        />
       </div>
     </div>
 
-    <!-- Feature cards (first row) -->
-    <div class="row mt-5 g-3">
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
+    <!-- Features -->
+    <div class="row mt-5 g-4">
+
+      <!-- Brand -->
+      <div class="col-lg-4 col-md-6">
+        <a
+          routerLink="/projects"
+          class="card feature-card h-100 shadow-sm border-0 text-decoration-none"
+        >
           <div class="card-body d-flex align-items-start gap-3">
+
             <i class="bi bi-building fs-2 text-primary"></i>
+
             <div>
-              <h5 class="card-title mb-1">Brand</h5>
-              <p class="card-text text-secondary small mb-0">Manage brand identity and assets</p>
+              <h5 class="card-title mb-1">
+                Brand
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                Manage brands, projects, and related business information.
+              </p>
             </div>
+
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
+      <!-- HR -->
+      <div class="col-lg-4 col-md-6">
+        <a
+          routerLink="/hr-cm"
+          class="card feature-card h-100 shadow-sm border-0 text-decoration-none"
+        >
           <div class="card-body d-flex align-items-start gap-3">
+
             <i class="bi bi-people fs-2 text-success"></i>
+
             <div>
-              <h5 class="card-title mb-1">HR CM</h5>
-              <p class="card-text text-secondary small mb-0">Employee cost management</p>
+              <h5 class="card-title mb-1">
+                HR Cost Management
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                Manage employee salaries and HR costs.
+              </p>
             </div>
+
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
+      <!-- Finance -->
+      <div class="col-lg-4 col-md-6">
+        <a
+          routerLink="/finance-cm"
+          class="card feature-card h-100 shadow-sm border-0 text-decoration-none"
+        >
           <div class="card-body d-flex align-items-start gap-3">
+
             <i class="bi bi-cash-coin fs-2 text-warning"></i>
-            <div>
-              <h5 class="card-title mb-1">Finance CM</h5>
-              <p class="card-text text-secondary small mb-0">Track expenses & cost control</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Feature cards (second row) -->
-    <div class="row mt-3 g-3">
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
+            <div>
+              <h5 class="card-title mb-1">
+                Finance Cost Management
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                Track expenses, budgets, and financial performance.
+              </p>
+            </div>
+
+          </div>
+        </a>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="col-lg-4 col-md-6">
+        <a
+          routerLink="/dashboard"
+          class="card feature-card h-100 shadow-sm border-0 text-decoration-none"
+        >
           <div class="card-body d-flex align-items-start gap-3">
+
             <i class="bi bi-bar-chart-line fs-2 text-danger"></i>
+
             <div>
-              <h5 class="card-title mb-1">Insights</h5>
-              <p class="card-text text-secondary small mb-0">Analytics & decision-making</p>
+              <h5 class="card-title mb-1">
+                Analytics Dashboard
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                Monitor KPIs, analytics, and business insights.
+              </p>
             </div>
+
           </div>
+        </a>
+      </div>
+
+      <!-- PeopleHub -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card feature-card feature-disabled h-100 shadow-sm">
+
+          <div class="card-body d-flex align-items-start gap-3">
+
+            <i class="bi bi-people-fill fs-2 text-secondary"></i>
+
+            <div>
+
+              <h5 class="card-title mb-1">
+
+                PeopleHub
+
+                <span class="badge bg-secondary ms-2">
+                  Current
+                </span>
+
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                You're currently viewing the PeopleHub home page.
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
       </div>
 
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
+      <!-- User Management -->
+      <div class="col-lg-4 col-md-6">
+        <a
+          routerLink="/user-management"
+          class="card feature-card h-100 shadow-sm border-0 text-decoration-none"
+        >
           <div class="card-body d-flex align-items-start gap-3">
-            <i class="bi bi-people-fill fs-2 text-info"></i>
-            <div>
-              <h5 class="card-title mb-1">People Hub</h5>
-              <p class="card-text text-secondary small mb-0">Centralized employee hub</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="col-md-4 col-sm-6">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body d-flex align-items-start gap-3">
             <i class="bi bi-person-gear fs-2 text-dark"></i>
+
             <div>
-              <h5 class="card-title mb-1">User Management</h5>
-              <p class="card-text text-secondary small mb-0">Roles & permissions control</p>
+              <h5 class="card-title mb-1">
+                User Management
+              </h5>
+
+              <p class="card-text text-secondary small mb-0">
+                Manage users, roles, permissions, and access rights.
+              </p>
             </div>
+
           </div>
-        </div>
+        </a>
       </div>
+
     </div>
 
   </div>
 </section>
 
-<!-- Learn More Section -->
-<section id="aboutSection" class="py-5 text-white learnmore-bg">
+<!-- About -->
+<section
+  id="aboutSection"
+  class="py-5 text-white learnmore-bg"
+>
+
   <div class="container">
+
     <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <h2 class="fw-bold mb-4">About Brand Cost Management</h2>
+
+      <div class="col-lg-10 mx-auto text-center">
+
+        <h2 class="fw-bold mb-4">
+          About PeopleHub
+        </h2>
+
         <p class="fs-5">
-          At TVE Electronics, this platform is designed to manage employees and projects in a clear and straightforward way. 
-          It brings together employee details, project allocations, and cost insights in one place. 
-          HR can oversee employee costs, Finance can provide accurate expense data, and the business gains a transparent view of project profitability. 
-          With better visibility and control, we can work more efficiently and achieve stronger growth.
+
+          PeopleHub is a centralized enterprise platform developed for
+          TVS Electronics to manage employees, projects, resource allocation,
+          HR cost management, finance cost management, analytics, and user
+          administration in one place.
+
         </p>
+
+        <p class="fs-5">
+
+          The platform improves collaboration between HR, Finance,
+          Project Managers, and Administrators by providing a single source
+          of truth for employee information, project allocations,
+          financial visibility, and business insights.
+
+        </p>
+
       </div>
+
     </div>
+
   </div>
+
 </section>

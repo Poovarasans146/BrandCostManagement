@@ -41,6 +41,13 @@ namespace BrandCostManagementAPI.ProjectModels
         [Column("brand_logo", TypeName = "LONGBLOB")]
         public byte[]? BrandLogo { get; set; }   // LONGBLOB → byte[]
 
+        [Column("contract_document", TypeName = "LONGBLOB")]
+        public byte[]? ContractDocument { get; set; }
+
+        [Column("contract_document_name")]
+        [StringLength(255)]
+        public string? ContractDocumentName { get; set; }
+
         [Column("project_start_date", TypeName = "date")]
         public DateTime? ProjectStartDate { get; set; }
 

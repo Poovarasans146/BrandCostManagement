@@ -1,40 +1,101 @@
 <div class="container py-4">
+
   <div class="card shadow-lg border-0 rounded-4">
-    <div class="card-header bg-primary text-white text-center rounded-top-4">
-      <h3 class="mb-0 fw-semibold">✏️ Edit Employee Details</h3>
+
+    <!-- Header -->
+    <div class="card-header bg-primary text-white rounded-top-4">
+      <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-center"
+      >
+
+        <h3 class="mb-2 mb-md-0 fw-semibold">
+          <i class="bi bi-pencil-square me-2"></i>
+          Edit Employee Details
+        </h3>
+
+        <span
+          *ngIf="editForm?.dirty"
+          class="badge bg-warning text-dark px-3 py-2"
+        >
+          Unsaved Changes
+        </span>
+
+      </div>
     </div>
 
+    <!-- Body -->
     <div class="card-body p-4">
-      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+      <form
+        [formGroup]="editForm"
+        (ngSubmit)="onSubmit()"
+      >
+
         <div class="row g-3">
+
           <!-- Employee ID -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Employee ID</label>
-            <input type="text" class="form-control" formControlName="employeeId" readonly>
+            <label class="form-label fw-semibold">
+              Employee ID
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="employeeId"
+              readonly
+            >
           </div>
 
           <!-- Name -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Name</label>
-            <input type="text" class="form-control" formControlName="name">
+            <label class="form-label fw-semibold">
+              Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+            >
           </div>
 
-          <!-- Mobile Number -->
+          <!-- Mobile -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Mobile Number</label>
-            <input type="text" class="form-control" formControlName="mobileNumber">
+            <label class="form-label fw-semibold">
+              Mobile Number
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="mobileNumber"
+            >
           </div>
 
           <!-- Email -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control" formControlName="emailId">
+            <label class="form-label fw-semibold">
+              Email
+            </label>
+
+            <input
+              type="email"
+              class="form-control"
+              formControlName="emailId"
+            >
           </div>
 
           <!-- Gender -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Gender</label>
-            <select class="form-select" formControlName="gender">
+            <label class="form-label fw-semibold">
+              Gender
+            </label>
+
+            <select
+              class="form-select"
+              formControlName="gender"
+            >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -44,46 +105,111 @@
 
           <!-- Location -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Location</label>
-            <input type="text" class="form-control" formControlName="location">
+            <label class="form-label fw-semibold">
+              Location
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="location"
+            >
           </div>
 
-          <!-- Manager Name -->
+          <!-- Manager -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Manager Name</label>
-            <input type="text" class="form-control" formControlName="managerName">
+            <label class="form-label fw-semibold">
+              Manager Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="managerName"
+            >
           </div>
 
-          <!-- Role Status -->
+          <!-- Role -->
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Role Status</label>
-            <select class="form-select" formControlName="roleStatus">
+            <label class="form-label fw-semibold">
+              Role Status
+            </label>
+
+            <select
+              class="form-select"
+              formControlName="roleStatus"
+            >
               <option value="">Select Role</option>
               <option value="On-Role">On-Role</option>
               <option value="Off-Role">Off-Role</option>
             </select>
           </div>
 
-          <!-- Date of Joining -->
-          <div class="col-md-6 col-lg-6">
-            <label class="form-label fw-semibold">Date of Joining</label>
-            <input type="date" class="form-control" formControlName="doj">
+          <!-- DOJ -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Date of Joining
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              formControlName="doj"
+            >
           </div>
 
-          <!-- Address (last field) -->
+          <!-- Address -->
           <div class="col-12">
-            <label class="form-label fw-semibold">Address</label>
-            <textarea rows="2" class="form-control" formControlName="address"></textarea>
+            <label class="form-label fw-semibold">
+              Address
+            </label>
+
+            <textarea
+              rows="3"
+              class="form-control"
+              formControlName="address"
+            ></textarea>
           </div>
+
         </div>
 
-        <!-- Submit Button -->
-        <div class="text-center mt-4">
-          <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" type="submit" [disabled]="isSubmitting">
-            <i class="bi bi-save me-2"></i>{{ isSubmitting ? 'Updating...' : 'Update Employee' }}
+        <!-- Buttons -->
+        <div
+          class="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-5"
+        >
+
+          <!-- Update -->
+          <button
+            type="submit"
+            class="btn btn-primary px-4 py-2"
+            [disabled]="isSubmitting || !editForm.dirty"
+          >
+
+            <i class="bi bi-save me-2"></i>
+
+            {{ isSubmitting ? 'Updating...' : 'Update Employee' }}
+
           </button>
+
+          <!-- Cancel -->
+          <button
+            type="button"
+            class="btn btn-outline-secondary px-4 py-2"
+            (click)="onCancel()"
+          >
+
+            <i class="bi bi-x-circle me-2"></i>
+
+            Cancel
+
+          </button>
+
         </div>
+
       </form>
+
     </div>
+
   </div>
+
 </div>

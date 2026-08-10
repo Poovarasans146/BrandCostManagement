@@ -91,6 +91,38 @@ namespace BrandCostManagementAPI.Controllers
             }
         }
 
+        // ✅ GET ContractDocument by ProjectId
+        [HttpGet("{projectId}/contract")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ViewContract(string projectId)
+        {
+            try
+            {
+                var project = await _context.Projects
+                    .FirstOrDefaultAsync(p => p.ProjectId == projectId);
+
+                if (project == null)
+                    return NotFound(new { message = "Project not found." });
+
+                if (project.ContractDocument == null)
+                    return NotFound(new { message = "No contract document available." });
+
+                return File(
+                    project.ContractDocument,
+                    "application/pdf",
+                    project.ContractDocumentName ?? "Contract.pdf"
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Unable to open contract.",
+                    error = ex.Message
+                });
+            }
+        }
+
         // ✅ Helper method - Convert uploaded logo to byte array
         private async Task<byte[]?> ConvertLogoToByteArrayAsync(IFormFile? logo)
         {
@@ -102,6 +134,24 @@ namespace BrandCostManagementAPI.Controllers
             using (var ms = new MemoryStream())
             {
                 await logo.CopyToAsync(ms);
+                return ms.ToArray();
+            }
+        }
+
+        // ✅ Helper method - Convert uploaded pdf to byte array
+        private async Task<byte[]?> ConvertPdfToByteArrayAsync(IFormFile? pdf)
+        {
+            if (pdf == null)
+                return null;
+
+            var ext = Path.GetExtension(pdf.FileName).ToLowerInvariant();
+
+            if (ext != ".pdf")
+                throw new InvalidOperationException("Only PDF files are allowed.");
+
+            using (var ms = new MemoryStream())
+            {
+                await pdf.CopyToAsync(ms);
                 return ms.ToArray();
             }
         }
@@ -118,11 +168,21 @@ namespace BrandCostManagementAPI.Controllers
             {
                 // Convert uploaded file if it exists
                 var files = HttpContext.Request.Form.Files;
+                var contractFile = files.FirstOrDefault(f => f.Name == "ContractDocument");
+
+                if (contractFile != null)
+                {
+                    project.ContractDocument = await ConvertPdfToByteArrayAsync(contractFile);
+                    project.ContractDocumentName = contractFile.FileName;
+                }
                 var logoFile = files.FirstOrDefault(f => f.Name == "BrandLogo");
+
                 if (logoFile != null)
                 {
                     project.BrandLogo = await ConvertLogoToByteArrayAsync(logoFile);
                 }
+
+
 
                 _context.Projects.Add(project);
                 await _context.SaveChangesAsync();
@@ -157,58 +217,97 @@ namespace BrandCostManagementAPI.Controllers
 
             try
             {
-                var existing = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projectId);
+                var existing = await _context.Projects
+                    .FirstOrDefaultAsync(p => p.ProjectId == projectId);
+
                 if (existing == null)
                     return NotFound(new { message = $"Project '{projectId}' not found." });
 
-                // ✅ Read form fields
+                // Read form values
                 var form = HttpContext.Request.Form;
 
                 existing.ProjectName = form["ProjectName"];
                 existing.Brand = form["Brand"];
-                existing.ApprovedCount = int.TryParse(form["ApprovedCount"], out var approved)
-                    ? approved
-                    : existing.ApprovedCount;
-                existing.ProjectValue = decimal.TryParse(form["ProjectValue"], out var value)
-                    ? value
-                    : existing.ProjectValue;
-                existing.ProjectStartDate = DateTime.TryParse(form["ProjectStartDate"], out var start)
-                    ? start
-                    : existing.ProjectStartDate;
-                existing.ProjectEndDate = DateTime.TryParse(form["ProjectEndDate"], out var end)
-                    ? end
-                    : existing.ProjectEndDate;
 
-                // ✅ Check if a new logo file is uploaded
+                existing.ApprovedCount =
+                    int.TryParse(form["ApprovedCount"], out var approved)
+                        ? approved
+                        : existing.ApprovedCount;
+
+                existing.ProjectValue =
+                    decimal.TryParse(form["ProjectValue"], out var value)
+                        ? value
+                        : existing.ProjectValue;
+
+                existing.ProjectStartDate =
+                    DateTime.TryParse(form["ProjectStartDate"], out var start)
+                        ? start
+                        : existing.ProjectStartDate;
+
+                existing.ProjectEndDate =
+                    DateTime.TryParse(form["ProjectEndDate"], out var end)
+                        ? end
+                        : existing.ProjectEndDate;
+
+                // ===========================
+                // Update Brand Logo
+                // ===========================
+
                 var logoFile = form.Files.FirstOrDefault(f => f.Name == "BrandLogo");
+
                 if (logoFile != null && logoFile.Length > 0)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        await logoFile.CopyToAsync(ms);
-                        existing.BrandLogo = ms.ToArray(); // update logo
-                    }
+                    existing.BrandLogo =
+                        await ConvertLogoToByteArrayAsync(logoFile);
+                }
+
+                // ===========================
+                // Update Contract PDF
+                // ===========================
+
+                var contractFile =
+                    form.Files.FirstOrDefault(f => f.Name == "ContractDocument");
+
+                if (contractFile != null && contractFile.Length > 0)
+                {
+                    existing.ContractDocument = await ConvertPdfToByteArrayAsync(contractFile);
+                    existing.ContractDocumentName = contractFile.FileName;
                 }
 
                 await _context.SaveChangesAsync();
+
                 await RecalculateAllocatedCountAsync(existing.ProjectId);
 
-                return Ok(new { message = "Project updated successfully.", project = existing });
+                return Ok(new
+                {
+                    message = "Project updated successfully.",
+                    project = existing
+                });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, new { message = "Database update failed.", error = ex.Message });
+                return StatusCode(500, new
+                {
+                    message = "Database update failed.",
+                    error = ex.Message
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error updating project.", error = ex.Message });
+                return StatusCode(500, new
+                {
+                    message = "Error updating project.",
+                    error = ex.Message
+                });
             }
         }
-
 
         // ✅ Recalculate Allocated Count
         private async Task RecalculateAllocatedCountAsync(string projectId)

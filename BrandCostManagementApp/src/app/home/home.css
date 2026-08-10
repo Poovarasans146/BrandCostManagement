@@ -9,3 +9,37 @@ html {
   border-top: 5px solid #003366;
   border-bottom: 5px solid #003366;
 }
+
+/* Current Page Card (PeopleHub) */
+.feature-disabled {
+  background-color: #e9ecef !important;
+  border: 2px solid #ced4da !important;
+  color: #6c757d !important;
+  cursor: default;
+  opacity: 1;
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
+.feature-disabled .card-body {
+  background-color: #e9ecef !important;
+}
+
+.feature-disabled .card-title,
+.feature-disabled .card-text {
+  color: #6c757d !important;
+}
+
+.feature-disabled i {
+  color: #adb5bd !important;
+}
+
+.feature-disabled:hover {
+  transform: none;
+  background-color: #e9ecef !important;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+
+.feature-disabled .badge {
+    background: #6c757d !important;
+}

@@ -3,8 +3,10 @@
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm header-bg learnmore-bg">
     <div class="container">
       <!-- Brand -->
-      <a class="navbar-brand fw-semibold" routerLink="/home">
-        BrandCostManagement
+      <!-- Brand -->
+      <a class="navbar-brand d-flex align-items-center fw-bold" routerLink="/home">
+        <i class="bi bi-people-fill brand-icon me-2"></i>
+        <span class="brand-text">PeopleHub</span>
       </a>
 
       <!-- Toggler (mobile only) -->
@@ -22,12 +24,12 @@
       <!-- Collapsible Menu -->
       <div
         id="mainNav"
-        class="collapse navbar-collapse"
+        class="collapse navbar-collapse justify-content-end"
         [ngClass]="{ show: !isNavbarCollapsed }"
       >
         <ul
           *ngIf="menuItems.length > 0"
-          class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2"
+          class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-lg-2"
         >
           <li *ngFor="let item of menuItems" class="nav-item">
             <a

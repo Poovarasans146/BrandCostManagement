@@ -8,6 +8,7 @@ import EmployeeComponent from "./employee/employee";
 import { EditEmployeeComponent } from './employee/edit-employee/edit-employee';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { UnsavedChangesGuard } from './guards/unsaved-changes.guard';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password';
 import { UserManagement } from './user-management/user-management';
 import { UserAdd } from './user-management/user-add';
@@ -41,18 +42,23 @@ export const routes: Routes = [
       { path: 'home', component: Home, canActivate: [RoleGuard] },
       { path: 'dashboard', component: Page, canActivate: [RoleGuard] },
       { path: 'employees', component: EmployeeComponent, canActivate: [RoleGuard] },
-      { path: 'employees/edit/:id', component: EditEmployeeComponent, canActivate: [RoleGuard] },
+  //   { path: 'employees/edit/:id', component: EditEmployeeComponent, canActivate: [RoleGuard] },
+      {path: 'employees/edit/:id',component: EditEmployeeComponent,canActivate: [RoleGuard],canDeactivate: [UnsavedChangesGuard]},
       { path: 'user-management', component: UserManagement, canActivate: [RoleGuard] },
       { path: 'users/add', component: UserAdd, canActivate: [RoleGuard] },
-      { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard] },
+    //  { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard] },
+      { path: 'users/edit/:id', component: UserEdit, canActivate: [RoleGuard], canDeactivate: [UnsavedChangesGuard] },
       { path: 'projects', component: ProjectsComponent, canActivate: [RoleGuard] },
       { path: 'projects/add', component: ProjectCreateComponent, canActivate: [RoleGuard] },
-      { path: 'projects/edit/:projectId', component: ProjectEditComponent, canActivate: [RoleGuard] },
+      { path: 'projects/edit/:projectId', component: ProjectEditComponent, canActivate: [RoleGuard], canDeactivate: [UnsavedChangesGuard]},
+     // { path: 'projects/edit/:projectId', component: ProjectEditComponent, canActivate: [RoleGuard] },
       { path: 'project-allocation', component: ProjectAllocationComponent, canActivate: [RoleGuard] },
       { path: 'project-allocation/add', component: ProjectAllocationAddComponent, canActivate: [RoleGuard] },
-      { path: 'project-allocation/edit/:id', component: ProjectAllocationEditComponent, canActivate: [RoleGuard] },
+     // { path: 'project-allocation/edit/:id', component: ProjectAllocationEditComponent, canActivate: [RoleGuard] },
+      { path: 'project-allocation/edit/:id', component: ProjectAllocationEditComponent, canActivate: [RoleGuard], canDeactivate: [UnsavedChangesGuard] },
       { path: 'hr-cm', component: HrComponent, canActivate: [RoleGuard] },
-      { path: 'hr/edit/:id', component: EditEmployeeHrFormComponent, canActivate: [RoleGuard] },
+     // { path: 'hr/edit/:id', component: EditEmployeeHrFormComponent, canActivate: [RoleGuard] },
+      { path: 'hr/edit/:id', component: EditEmployeeHrFormComponent, canActivate: [RoleGuard], canDeactivate: [UnsavedChangesGuard] },
       { path: 'finance-cm', component: Page, canActivate: [RoleGuard] },
       { path: 'user-management', component: Page, canActivate: [RoleGuard] },
       { path: 'reports', component: Page, canActivate: [RoleGuard] },

@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EmployeeService, Employee } from '../services/employee.service';
+import { CanComponentDeactivate } from '../guards/unsaved-changes.guard';
 
 @Component({
   selector: 'app-edit-employee-hr-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './edit-employee-hr-form.html'
+  templateUrl: './edit-employee-hr-form.html',
+  styleUrls:['./edit-employee-hr-form.css']
 })
-export class EditEmployeeHrFormComponent implements OnInit {
+export class EditEmployeeHrFormComponent implements OnInit, CanComponentDeactivate {
   editForm!: FormGroup;
   employeeId!: number;
   isSubmitting = false;
+  isSaved = false;
+  allowNavigation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -21,6 +25,22 @@ export class EditEmployeeHrFormComponent implements OnInit {
     private router: Router,
     private empService: EmployeeService
   ) {}
+
+  @HostListener('window:beforeunload',['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent): void {
+
+    if (
+        this.editForm &&
+        this.editForm.dirty &&
+        !this.isSaved
+    ) {
+
+        event.preventDefault();
+        event.returnValue='';
+
+    }
+
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -66,7 +86,9 @@ export class EditEmployeeHrFormComponent implements OnInit {
           doj: dojStr,
           cost: emp.cost ?? ''
         });
+        this.editForm.markAsPristine();
       },
+      
       error: (err: any) => {
         console.error('Failed to load employee', err);
         alert(err?.error?.message || 'Failed to load employee data');
@@ -75,7 +97,33 @@ export class EditEmployeeHrFormComponent implements OnInit {
     });
   }
 
+  canDeactivate(): boolean {
+
+      if(this.allowNavigation){
+          return true;
+      }
+
+      if(
+          this.editForm &&
+          this.editForm.dirty &&
+          !this.isSaved
+      ){
+
+          return confirm(
+              'You have unsaved changes.\n\nDo you want to leave this page?'
+          );
+
+      }
+
+      return true;
+
+  }
+
   onSubmit(): void {
+    if(!this.editForm.dirty){
+        return;
+    }
+
     if (this.editForm.get('cost')?.invalid) {
       this.editForm.get('cost')?.markAsTouched();
       alert('Please provide a valid cost (>= 0).');
@@ -93,10 +141,20 @@ export class EditEmployeeHrFormComponent implements OnInit {
     };
 
     this.empService.updateEmployee(this.employeeId, payload).subscribe({
-      next: (res: any) => {
-        this.isSubmitting = false;
-        alert(res?.message || 'Cost updated successfully!');
-        this.router.navigate(['/hr-cm']);
+      next:(res:any)=>{
+
+          this.isSubmitting=false;
+
+          this.isSaved=true;
+
+          this.allowNavigation=true;
+
+          this.editForm.markAsPristine();
+
+          alert(res?.message || 'Cost updated successfully!');
+
+          this.router.navigate(['/hr-cm']);
+
       },
       error: (err: any) => {
         this.isSubmitting = false;

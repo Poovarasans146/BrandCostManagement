@@ -165,6 +165,13 @@ namespace BrandCostManagementAPI.Data
                 entity.Property(e => e.BrandLogo)
                       .HasColumnName("brand_logo");
 
+                entity.Property(e => e.ContractDocument)
+                      .HasColumnName("contract_document");
+
+                entity.Property(e => e.ContractDocumentName)
+                      .HasColumnName("contract_document_name")
+                      .HasMaxLength(255);
+
                 entity.Property(e => e.ProjectStartDate)
                       .HasColumnName("project_start_date");
 

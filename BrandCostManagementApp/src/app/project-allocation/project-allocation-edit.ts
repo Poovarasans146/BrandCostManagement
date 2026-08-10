@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectAllocationService, ProjectAllocation,Employee,Project } from '../services/project-allocation.service';
+import { CanComponentDeactivate } from '../guards/unsaved-changes.guard';
 
 @Component({
   selector: 'app-project-allocation-edit',
@@ -11,7 +12,7 @@ import { ProjectAllocationService, ProjectAllocation,Employee,Project } from '..
   templateUrl: './project-allocation-edit.html',
   styleUrls: ['./project-allocation.css']
 })
-export class ProjectAllocationEditComponent implements OnInit {
+export class ProjectAllocationEditComponent implements OnInit, CanComponentDeactivate {
   allocationId!: number;
   allocationArray?: ProjectAllocation;
   allocations: ProjectAllocation[] = [];
@@ -34,12 +35,29 @@ export class ProjectAllocationEditComponent implements OnInit {
   errorMessage = '';
   loading = false;
 
+  isSaved = false;
+  allowNavigation = false;
+
+  /* Track original values */
+  private originalData: any = {};
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private allocationService: ProjectAllocationService,
     private cd: ChangeDetectorRef
   ) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent): void {
+
+    if (this.hasChanges() && !this.isSaved) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+
+  }
 
   ngOnInit(): void {
     this.allocationId = Number(this.route.snapshot.paramMap.get('id'));
@@ -48,6 +66,24 @@ export class ProjectAllocationEditComponent implements OnInit {
       this.fetchAllocation();
     }
     this.fetchAllocations(); 
+  }
+
+  canDeactivate(): boolean {
+
+    if (this.allowNavigation) {
+      return true;
+    }
+
+    if (this.hasChanges() && !this.isSaved) {
+
+      return confirm(
+        'You have unsaved changes.\n\nDo you want to leave this page?'
+      );
+
+    }
+
+    return true;
+
   }
 
 // 🔹 Fetch allocation details by ID using project-based endpoint
@@ -70,6 +106,19 @@ fetchAllocation() {
         this.employeeName = res.employeeName || '';
         this.projectId = res.projectId;
         this.projectName = res.projectName || '';
+
+        this.originalData = {
+
+          role: this.role,
+
+          allocation: this.allocation,
+
+          allocationStart: this.allocationStart,
+
+          allocationEnd: this.allocationEnd
+
+        };
+
       } else {
         this.errorMessage = 'Allocation not found.';
       }
@@ -88,6 +137,22 @@ fetchAllocation() {
 }
 
 
+  hasChanges(): boolean {
+
+    return (
+
+      this.role !== this.originalData.role ||
+
+      this.allocation !== this.originalData.allocation ||
+
+      this.allocationStart !== this.originalData.allocationStart ||
+
+      this.allocationEnd !== this.originalData.allocationEnd
+
+    );
+
+  }
+
     // --- ✅ Fetch All Existing Allocations ---
   fetchAllocations() {
     this.allocationService.getAllAllocations().subscribe({
@@ -105,6 +170,10 @@ fetchAllocation() {
 
   // 🔹 Update allocation
   updateAllocation() {
+    if (!this.hasChanges()) {
+        return;
+    }
+
     if (!this.allocation) return;
 
     if (!this.role || !this.allocation || !this.allocationStart || !this.allocationEnd) {
@@ -196,10 +265,18 @@ fetchAllocation() {
 
     this.allocationService.update(this.allocationId, payload).subscribe({
       next: () => {
+
         console.log(payload);
+
+        this.isSaved = true;
+
+        this.allowNavigation = true;
+
         alert('✅ Allocation updated successfully!');
+
         this.router.navigate(['/project-allocation']);
-      },
+
+    },
       error: (err) => {
         console.error(err);
         alert('❌ Failed to update allocation.');

@@ -7,6 +7,9 @@ export interface Project {
   allocatedCount: number;
   projectValue: number;
   brandLogo?: string | null;
+  //contractDocument?: File | null;
+  contractDocument?: string | null;
+  contractDocumentName?: string | null;
   projectStartDate?: string | null;
   projectEndDate?: string | null;
 }

@@ -28,6 +28,8 @@ interface Project {
 
   brandLogo?: string | null;
 
+  contractDocumentName?: string | null;
+
   projectStartDate?: string;
 
   projectEndDate?: string;
@@ -195,6 +197,37 @@ export class ProjectsComponent implements OnInit {
     this.router.navigate([`/projects/edit/${p.projectId}`]);
 
   }
+
+  viewContract(project: Project, event: Event) {
+
+    event.stopPropagation();
+
+    this.http.get(
+        `${this.apiUrl}/${project.projectId}/contract`,
+        {
+          headers: this.getAuthHeader(),
+          responseType: 'blob'
+        }
+    ).subscribe({
+
+        next: blob => {
+
+            const pdf = window.URL.createObjectURL(blob);
+
+            window.open(pdf, '_blank');
+
+        },
+
+        error: err => {
+
+            alert(err?.error?.message || 'Unable to open PDF.');
+
+        }
+
+    });
+
+  }
+
 
 }
 

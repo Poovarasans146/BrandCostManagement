@@ -1,7 +1,15 @@
 <div class="container py-4">
   <div class="card shadow-lg border-0 rounded-4">
-    <div class="card-header bg-primary text-white text-center rounded-top-4">
-      <h3 class="mb-0 fw-semibold">✏️ Edit Employee (HR) — Cost only</h3>
+    <div class="card-header bg-primary text-white rounded-top-4">
+
+      <div class="d-flex justify-content-between align-items-center">
+
+        <h3 class="mb-0 fw-semibold"> ✏️ Edit Employee (HR) — Cost only </h3>
+
+        <span *ngIf="editForm.dirty" class="badge bg-warning text-dark"> Unsaved Changes</span>
+
+      </div>
+
     </div>
 
     <div class="card-body p-4">
@@ -68,7 +76,7 @@
         </div>
 
         <div class="text-center mt-4">
-          <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" type="submit" [disabled]="isSubmitting">
+          <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" type="submit" [disabled]="isSubmitting || !editForm.dirty">
             <i class="bi bi-save me-2"></i>{{ isSubmitting ? 'Saving...' : 'Save Changes' }}
           </button>
 

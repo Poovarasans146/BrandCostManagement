@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProjectService } from '../services/project.service';
+import { CanComponentDeactivate } from '../guards/unsaved-changes.guard';
 
 export interface Project {
   projectId: string;
@@ -13,6 +14,9 @@ export interface Project {
   allocatedCount: number;
   projectValue: number;
   brandLogo?: string | null;
+  //contractDocument?: File | null;
+  contractDocument?: string | null;
+  contractDocumentName?: string | null;
   projectStartDate?: string | null;
   projectEndDate?: string | null;
 }
@@ -24,13 +28,17 @@ export interface Project {
   templateUrl: './project-edit.html',
   styleUrls: ['./project-edit.css']
 })
-export class ProjectEditComponent implements OnInit {
+export class ProjectEditComponent implements OnInit, CanComponentDeactivate {
   editForm!: FormGroup;
   project?: Project;
   projectId!: string;
   logoFile?: File | null = null;
+  contractFile?: File;
+  existingContractName = '';
   logoPreview?: string | null = null;
   loading = false;
+  isSaved = false;
+  allowNavigation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +46,20 @@ export class ProjectEditComponent implements OnInit {
     private router: Router,
     private svc: ProjectService
   ) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent): void {
+
+    if (
+      this.editForm &&
+      this.editForm.dirty &&
+      !this.isSaved
+    ) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+
+  }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({
@@ -71,12 +93,34 @@ export class ProjectEditComponent implements OnInit {
     this.loadProject(id);
   }
 
+  canDeactivate(): boolean {
+
+    if (this.allowNavigation) {
+      return true;
+    }
+
+    if (
+      this.editForm &&
+      this.editForm.dirty &&
+      !this.isSaved
+    ) {
+
+      return confirm(
+        'You have unsaved changes.\n\nDo you want to leave this page?'
+      );
+
+    }
+
+    return true;
+
+  }
+
   private loadProject(id: string) {
     this.loading = true;
     this.svc.getById(id).subscribe({
       next: (p) => {
         this.project = p;
-
+        this.existingContractName = p.contractDocumentName ?? '';
         const formatDate = (d?: string | null) => {
           if (!d) return '';
           const date = new Date(d);
@@ -100,6 +144,8 @@ export class ProjectEditComponent implements OnInit {
           projectEndDate: endDate && new Date(endDate) < new Date(startDate) ? startDate : endDate
         });
 
+        this.editForm.markAsPristine();
+
         if (p.brandLogo) {
           this.logoPreview = 'data:image/*;base64,' + p.brandLogo;
         }
@@ -116,15 +162,76 @@ export class ProjectEditComponent implements OnInit {
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length) {
+
       this.logoFile = input.files[0];
+
       const reader = new FileReader();
-      reader.onload = () => this.logoPreview = reader.result as string;
+
+      reader.onload = () => {
+        this.logoPreview = reader.result as string;
+      };
+
       reader.readAsDataURL(this.logoFile);
+
+      // Mark form as modified
+      this.editForm.markAsDirty();
     }
   }
+/*
+  onContractSelected(event:any)
+  {
+      const file = event.target.files?.[0];
+      
 
+      if(!file)
+      {
+          this.contractFile = undefined;
+          return;
+      }
+
+      if(file.type !== 'application/pdf')
+      {
+          alert('Only PDF files are allowed.');
+          event.target.value='';
+          this.contractFile=undefined;
+          return;
+      }
+
+      this.contractFile=file;
+      this.contractFile = file;
+      this.editForm.markAsDirty();
+  }
+  */
+
+  onContractSelected(event: any)
+  {
+      const file = event.target.files?.[0];
+
+      if (!file)
+      {
+          this.contractFile = undefined;
+          return;
+      }
+
+      if (file.type !== 'application/pdf')
+      {
+          alert('Only PDF files are allowed.');
+          event.target.value = '';
+          this.contractFile = undefined;
+          return;
+      }
+
+      this.contractFile = file;
+
+      this.editForm.markAsDirty();
+  }
   onSubmit() {
+    if (!this.editForm.dirty && !this.logoFile && !this.contractFile){
+      return;
+    }
+
     if (this.editForm.invalid) {
       this.editForm.markAllAsTouched();
       return;
@@ -154,14 +261,31 @@ export class ProjectEditComponent implements OnInit {
     fd.append('ProjectEndDate', formatDateTime(end));
 
     if (this.logoFile) fd.append('BrandLogo', this.logoFile, this.logoFile.name);
+    if (this.contractFile){
+        fd.append(
+            'ContractDocument',
+            this.contractFile,
+            this.contractFile.name
+        );
+    }
   
     this.loading = true;
     this.svc.update(this.projectId, fd).subscribe({
       next: () => {
+
         this.loading = false;
+
+        this.isSaved = true;
+
+        this.allowNavigation = true;
+
+        this.editForm.markAsPristine();
+
         alert(`${this.project?.projectId} - ${this.project?.projectName} updated successfully`);
+
         this.router.navigate(['/projects']);
-      },
+
+    },
       error: (err) => {
         this.loading = false;
         console.error(err);
@@ -171,7 +295,7 @@ export class ProjectEditComponent implements OnInit {
     });
   }
 
-  cancel() {
+  cancel(): void {
     this.router.navigate(['/projects']);
   }
 }

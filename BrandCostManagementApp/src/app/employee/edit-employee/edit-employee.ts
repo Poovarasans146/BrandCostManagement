@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { EmployeeService, Employee } from '../../services/employee.service';
+import {Component, OnInit, HostListener} from '@angular/core';
+
+import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
+
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+
+import {EmployeeService, Employee} from '../../services/employee.service';
+
 import { CommonModule } from '@angular/common';
+
+import {CanComponentDeactivate} from '../../guards/unsaved-changes.guard';
 
 @Component({
   selector: 'app-edit-employee',
@@ -10,10 +16,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule]
 })
-export class EditEmployeeComponent implements OnInit {
+
+export class EditEmployeeComponent implements OnInit, CanComponentDeactivate {
+
   editForm!: FormGroup;
   employeeId!: number;
   isSubmitting = false;
+  isSaved = false;
+  allowNavigation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -21,6 +31,23 @@ export class EditEmployeeComponent implements OnInit {
     private router: Router,
     private empService: EmployeeService
   ) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+    beforeUnloadHandler(event: BeforeUnloadEvent): void {
+
+      if (
+        this.editForm &&
+        this.editForm.dirty &&
+        !this.isSaved
+      ) {
+
+        event.preventDefault();
+
+        event.returnValue = '';
+
+      }
+
+    }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -70,42 +97,103 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    if (this.editForm.invalid) return;
+  canDeactivate(): boolean {
+
+    if (this.allowNavigation) {
+      return true;
+    }
+
+    if (
+      this.editForm &&
+      this.editForm.dirty &&
+      !this.isSaved
+    ) {
+
+      return confirm(
+        'You have unsaved changes.\n\nDo you want to leave this page?'
+      );
+
+    }
+
+    return true;
+
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/employees']);
+  }
+
+  onSubmit(): void {
+
+    if (this.editForm.invalid) {
+      return;
+    }
+
+    if (!this.editForm.dirty) {
+      return;
+    }
 
     this.isSubmitting = true;
 
-    // Get all form values including disabled fields
     const formData = this.editForm.getRawValue();
 
-    // Remove fields backend shouldn't update
     delete formData.employeeId;
     delete formData.emailId;
 
-    // Format date properly
     if (formData.doj) {
-      formData.doj = new Date(formData.doj).toISOString().substring(0, 10);
+      formData.doj = new Date(formData.doj)
+        .toISOString()
+        .substring(0, 10);
     }
 
-    // Replace empty strings with null to avoid backend parsing issues
     Object.keys(formData).forEach(key => {
-      if (formData[key] === '') formData[key] = null;
-    });
-
-    console.log('Payload to backend:', formData); // debug payload
-
-    // Send payload as proper JSON object
-    this.empService.updateEmployee(this.employeeId, formData).subscribe({
-      next: (res: any) => {
-        this.isSubmitting = false;
-        alert(res.message || 'Employee updated successfully!');
-        this.router.navigate(['/employees']);
-      },
-      error: (err: any) => {
-        this.isSubmitting = false;
-        console.error(err);
-        alert(err.error?.message || 'Failed to update employee.');
+      if (formData[key] === '') {
+        formData[key] = null;
       }
     });
+
+    console.log('Payload to backend:', formData);
+
+    this.empService.updateEmployee(this.employeeId, formData).subscribe({
+
+      next: (res: any) => {
+
+        this.isSubmitting = false;
+
+        this.isSaved = true;
+
+        this.allowNavigation = true;
+
+        this.editForm.markAsPristine();
+
+        alert(res.message || 'Employee updated successfully!');
+
+        this.router.navigate(['/employees']);
+
+      },
+
+      error: (err: any) => {
+
+        this.isSubmitting = false;
+
+        this.isSaved = false;
+
+        this.allowNavigation = false;
+
+        console.error(err);
+
+        alert(err?.error?.message || 'Failed to update employee.');
+
+      }
+
+    });
+
   }
+
+  hasChanges(): boolean {
+
+    return this.editForm?.dirty ?? false;
+
+  }
+
 }

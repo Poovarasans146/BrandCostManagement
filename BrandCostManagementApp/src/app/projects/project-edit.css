@@ -24,3 +24,19 @@ button {
 button:hover {
   transform: scale(1.03);
 }
+
+.btn:disabled{
+opacity:.65;
+cursor:not-allowed;
+}
+
+input[readonly]{
+background:#f8f9fa;
+cursor:not-allowed;
+}
+
+.badge{
+font-size:.8rem;
+padding:.5rem .8rem;
+border-radius:20px;
+}
